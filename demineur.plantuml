@@ -31,18 +31,20 @@ class Cell {
 
     -flagged : bool
     -bomb : bool
-    -shadowed : bool
-    -nearby : int
+    -hidden : bool
+    -nearby_bombs : int
 
-    +isBomb() : bool
-    -setBomb(bomb :bool) : void
+    +is_bomb() : bool
+    -set_bomb(bomb :bool) : void
 
-    +isFlag() : bool
-    +setFlag(flagged :bool) : void
+    +is_flagged() : bool
+    +set_flagged(flagged :bool) : void
 
-    +isShadowed(shadowed :bool) : bool
-    +setShadowed() : void
+    +is_hidden() : bool
+    +set_hidden(hidden: bool) : void
 
+    +get_nearby_bombs() : int
+    +set_nearby_bombs(nearby_bombs: int) : void
 }
 
 @enduml
