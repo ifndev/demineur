@@ -1,0 +1,52 @@
+@startuml
+class GameDisplay {
+    +print(Gb :GameBoard)
+}
+
+class GameManager {
+    -status :int
+    -board :GameBoard
+    -sessionTime :int
+    -display : GameDisplay
+
+    +processInput(inp :string) : void
+
+    -printScores(ascending :bool) : void
+    -printPlayTime() : void
+}
+
+class GameBoard {
+    -sizeX : int
+    -sizeY : int
+
+    -grid : Cell[sizeX][sizeY]
+
+    +__init__()
+
+    +reveal(x, y :int) : bool
+    +toggleFlagged(x, y :int) : void
+
+    -populate() : void
+    -propagateFrom(x, y :int) : void
+
+}
+
+class Cell {
+
+    -flagged : bool
+    -bomb : bool
+    -shadowed : bool
+    -nearby : int
+
+    +isBomb() : bool
+    -setBomb(bomb :bool) : void
+
+    +isFlag() : bool
+    +setFlag(flagged :bool) : void
+
+    +isShadowed(shadowed :bool) : bool
+    +setShadowed() : void
+
+}
+
+@enduml
