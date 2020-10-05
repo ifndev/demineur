@@ -6,13 +6,9 @@ class GameDisplay {
 class GameManager {
     -status :int
     -board :GameBoard
-    -sessionTime :int
     -display : GameDisplay
 
     +processInput(inp :string) : void
-
-    -printScores(ascending :bool) : void
-    -printPlayTime() : void
 }
 
 class GameBoard {
