@@ -14,8 +14,13 @@ class GameBoard:
                 self.__grid[y].append(Cell())
 
     def reveal(self, x: int, y: int):
-        #TODO #6 implement reveal()
-        pass
+        self.__grid[x][y].set_hidden(False)
+
+        if self.__grid[x][y].is_bomb():
+            pass
+            # Game over
+        else:
+            self.propagateFrom(x, y)
 
     def toggle_flagged(self, x: int, y: int):
         self.__grid[x][y].set_flagged(not __grid[x][y].is_flagged())
