@@ -1,9 +1,9 @@
 class Cell:
     def __init__(self):
-        self.flagged = False
-        self.bomb = False
-        self.hidden = False
-        self.nearby_bombs = 0
+        self.__flagged = False
+        self.__bomb = False
+        self.__hidden = False
+        self.__nearby_bombs = 0
 
     def is_bomb(self):
         return self.bomb
