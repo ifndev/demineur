@@ -13,6 +13,9 @@ class GameBoard:
             for x in range(sizeX):
                 self.__grid[y].append(Cell())
 
+    def get_grid(self):
+        return self.__grid
+
     def reveal(self, x: int, y: int):
         #TODO #6 implement reveal()
         pass
