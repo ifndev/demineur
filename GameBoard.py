@@ -26,7 +26,7 @@ class GameBoard:
             self.propagateFrom(x, y)
 
     def toggle_flagged(self, x: int, y: int):
-        self.__grid[x][y].set_flagged(not __grid[x][y].is_flagged())
+        self.__grid[x][y].set_flagged(not self.__grid[x][y].is_flagged())
 
     def populate(self):
         #TODO #5 implement populate()
