@@ -1,6 +1,6 @@
 @startuml
 class GameDisplay {
-    +print(Gb :GameBoard)
+    +print(Gb :GameBoard) : void
 }
 
 class GameManager {
