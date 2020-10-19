@@ -1,7 +1,6 @@
 from typing import List
-
 from Cell import Cell
-
+from random import randint, seed
 
 class GameBoard:
     def __init__(self, sizeX: int, sizeY: int):
@@ -31,8 +30,15 @@ class GameBoard:
         self.__grid[x][y].set_flagged(not self.__grid[x][y].is_flagged())
 
     def populate(self) -> None:
-        #TODO #5 implement populate()
-        pass
+        seed()
+        nb_bombs = self.__sizeX # This should be an option
+        for i in range(nb_bombs):
+            x = randint(0, self.__sizeX-1) # Bad idea, we can end up with too less bombs
+            y = randint(0, self.__sizeY-1)
+            self.__grid[x][y].set_bomb(True)
+
+            # Needs nearby bombs counting
+
 
     def propagateFrom(self, x: int, y: int) -> None:
         #TODO #1 implementGameBoard.propagate()
