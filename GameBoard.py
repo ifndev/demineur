@@ -45,5 +45,13 @@ class GameBoard:
 
 
     def propagateFrom(self, x: int, y: int) -> None:
-        #TODO #1 implementGameBoard.propagate()
+        if self.__grid[x][y].get_nearby_bombs() == 0:
+            self.__grid[x][y].set_hidden(False)
+            for xAdgacent in range(-1, 2):
+                for yAdgacent in range(-1, 2):
+                    if not (x==0 and y==0) and (0 <= x+xAdgacent < self.__sizeX) and (0 <= y+yAdgacent < self.__sizeY):
+                        if self.__grid[x+xAdgacent][y+yAdgacent].is_hidden():
+                            self.propagateFrom(x+xAdgacent, y+yAdgacent)
+        elif not self.__grid[x][y].is_bomb():
+            self.__grid[x][y].set_hidden(False)
         pass
