@@ -35,9 +35,13 @@ class GameBoard:
         for i in range(nb_bombs):
             x = randint(0, self.__sizeX-1) # Bad idea, we can end up with too less bombs
             y = randint(0, self.__sizeY-1)
-            self.__grid[x][y].set_bomb(True)
-
-            # Needs nearby bombs counting
+            
+            if not self.__grid[x][y].is_bomb():
+                self.__grid[x][y].set_bomb(True)
+                for xAdgacent in range(-1, 2): # TODO prettify
+                    for yAdgacent in range(-1, 2):
+                        if (0 <= x+xAdgacent < self.__sizeX) and (0 <= y+yAdgacent < self.__sizeY):
+                            self.__grid[x+xAdgacent][y+yAdgacent].set_nearby_bombs( self.__grid[x+xAdgacent][y+yAdgacent].get_nearby_bombs() + 1)
 
 
     def propagateFrom(self, x: int, y: int) -> None:
