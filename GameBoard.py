@@ -21,8 +21,10 @@ class GameBoard:
         self.__grid[x][y].set_hidden(False)
 
         if self.__grid[x][y].is_bomb():
-            pass
-            # Game over
+            for x in self.__grid:
+                for y in x:
+                    y.set_hidden(False)
+            return True # Game over
         else:
             self.propagateFrom(x, y)
 

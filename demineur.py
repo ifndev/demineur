@@ -18,7 +18,10 @@ def render(scr, Gb, cursorY, cursorX):
                     
             else:
                 if cell.is_bomb():
-                    scr.addstr(x, y, "X", curses.color_pair(1))
+                    if cell.is_flagged():
+                        scr.addstr(x, y, "X", curses.color_pair(4))
+                    else:
+                        scr.addstr(x, y, "X", curses.color_pair(1))
                     
                 else:
                     if cell.get_nearby_bombs() > 0:
@@ -35,7 +38,8 @@ def main(scr):
 
     curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_RED) # Mine
     curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_BLUE) # Flag
-    curses.init_pair(3, curses.COLOR_BLACK, curses.COLOR_YELLOW)
+    curses.init_pair(3, curses.COLOR_BLACK, curses.COLOR_YELLOW) # Cursor
+    curses.init_pair(4, curses.COLOR_WHITE, curses.COLOR_GREEN) # Sucessfully spotted mine
 
     scr.border(0)
     curses.curs_set(False)
@@ -55,7 +59,8 @@ def main(scr):
             return
         
         if ch == ord(' '):
-            Gb.reveal(cursorX-1, cursorY-1)
+            if(Gb.reveal(cursorX-1, cursorY-1)):
+                cursorX, cursorY = -1, -1
             
 
         if ch == ord('f'):
