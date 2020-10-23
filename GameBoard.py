@@ -9,10 +9,10 @@ class GameBoard:
 
         self.__grid = []
         
-        for y in range(sizeY):
+        for x in range(sizeX):
             self.__grid.append([])
-            for x in range(sizeX):
-                self.__grid[y].append(Cell())
+            for y in range(sizeY):
+                self.__grid[x].append(Cell())
 
     def get_grid(self) -> List[List[Cell]]:
         return self.__grid
@@ -44,14 +44,22 @@ class GameBoard:
                             self.__grid[x+xAdgacent][y+yAdgacent].set_nearby_bombs( self.__grid[x+xAdgacent][y+yAdgacent].get_nearby_bombs() + 1)
 
 
-    def propagateFrom(self, x: int, y: int) -> None:
-        if self.__grid[x][y].get_nearby_bombs() == 0:
+    def propagateFrom(self, x: int, y: int, r :int =0) -> None:
+        # About the "r" optional argument
+        # 
+        # In order to prevent a stack overflow, python limits recursion depth to 990
+        # Circumventing would not be smart and could lead to the game hanging on propagate
+        # on really large boards.
+        #
+        # ==> We manually clamp the depth to a fixed limit, revealing only part of the board
+
+        if self.__grid[x][y].get_nearby_bombs() == 0 and r < 200:
+                                                         # Here
             self.__grid[x][y].set_hidden(False)
             for xAdgacent in range(-1, 2):
                 for yAdgacent in range(-1, 2):
                     if not (x==0 and y==0) and (0 <= x+xAdgacent < self.__sizeX) and (0 <= y+yAdgacent < self.__sizeY):
                         if self.__grid[x+xAdgacent][y+yAdgacent].is_hidden():
-                            self.propagateFrom(x+xAdgacent, y+yAdgacent)
+                            self.propagateFrom(x+xAdgacent, y+yAdgacent, r+1)
         elif not self.__grid[x][y].is_bomb():
             self.__grid[x][y].set_hidden(False)
-        pass
