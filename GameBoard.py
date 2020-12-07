@@ -32,6 +32,9 @@ class GameBoard:
     def toggle_flagged(self, x: int, y: int) -> None:
         self.__grid[x][y].set_flagged(not self.__grid[x][y].is_flagged())
 
+    def is_flagged(self, x: int, y: int) -> bool:
+        return self.__grid[x][y].is_flagged()
+
     def populate(self) -> None:
         seed()
         nb_bombs = self.__size_x # This should be an option

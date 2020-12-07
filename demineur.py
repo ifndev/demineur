@@ -61,7 +61,8 @@ def main(scr):
             return
         
         if ch == ord(' '):
-            if gb.reveal(cursor_x - 1, cursor_y - 1):
+            # If the cell is flagged, prevent uncovering the cell
+            if not gb.is_flagged(cursor_x - 1, cursor_y - 1) and gb.reveal(cursor_x - 1, cursor_y - 1):
                 cursor_x, cursor_y = -1, -1
 
         if ch == ord('f'):
