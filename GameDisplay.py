@@ -6,11 +6,11 @@ class GameDisplay:
         self.__bomb_char = "💥"
         self.__shadow_char = "⬛"
         self.__flag_char = "🚩"
-        #self.__number_chars = ["⬜","1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣"]
-        self.__number_chars = ["⬜","1 ", "2 ", "3 ", "4 ", "5 ", "6 ", "7 ", "8 "]
+        # self.__number_chars = ["⬜", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣"]
+        self.__number_chars = ["⬜", "1 ", "2 ", "3 ", "4 ", "5 ", "6 ", "7 ", "8 "]
 
-    def print_board(self, Gb: GameBoard) -> None:
-        for row in Gb.get_grid():
+    def print_board(self, gb: GameBoard) -> None:
+        for row in gb.get_grid():
             for cell in row:
                 if cell.is_hidden():
                     if cell.is_flagged():
