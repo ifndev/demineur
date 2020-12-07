@@ -1,8 +1,17 @@
 import curses
 from GameBoard import GameBoard
+from Scoreboard import Scoreboard, stringify_winner
 
 
 def render(scr, gb: GameBoard, cursor_y, cursor_x):
+    """
+    Affiche le démineur dans la "fenêtre" Curses
+    :param scr:
+    :param gb:
+    :param cursor_y:
+    :param cursor_x:
+    :return:
+    """
     y = 1
     for row in gb.get_grid():
         x = 1
@@ -33,7 +42,40 @@ def render(scr, gb: GameBoard, cursor_y, cursor_x):
         y += 1
 
 
-def main(scr):
+def game_over() -> None:
+    """
+    Affiche le menu de game over
+    """
+    print("Game Over!")
+    print("Vous aurez probablement plus de chances la prochaine fois...")
+
+
+def display_score(scoreboard) -> None:
+    """
+    Display the scoreboard
+    :param scoreboard: Instance de Scoreboard
+    """
+    print("Nos gagnants sont...")
+    i = 1
+    for winner in scoreboard.get_scoreboard():
+        print(str(i) + ". " + stringify_winner(winner))
+        i += 1
+
+
+def display_controls() -> None:
+    """
+    Display the controls
+    """
+    print("[ARROWS] pour déplacer le curseur")
+    print("[SPACE] pour révéler une case")
+    print("[F] pour placer ou retirer un drapeau")
+
+
+def play(scr) -> None:
+    """
+    Handles the controls and the game logic.
+    :param scr: the instance of the window created by Curses
+    """
     HEIGHT, WIDTH = scr.getmaxyx()  # Returns a tuple
     WIDTH -= 2
     HEIGHT -= 2
@@ -51,22 +93,25 @@ def main(scr):
     cursor_y = 1
 
     gb.populate()
-    
+
     render(scr, gb, cursor_y, cursor_x)
 
     while True:  # Main Loop
         ch = scr.getch()
-        
+
         if ch == ord('q'):
             return
-        
+
         if ch == ord(' '):
             # If the cell is flagged, prevent uncovering the cell
             if not gb.is_flagged(cursor_x - 1, cursor_y - 1) and gb.reveal(cursor_x - 1, cursor_y - 1):
-                cursor_x, cursor_y = -1, -1
+                # There's a bomb here... Boom!
+                curses.endwin()  # Close the game window
+                game_over()
+                break
 
         if ch == ord('f'):
-            gb.toggle_flagged(cursor_x-1, cursor_y-1)
+            gb.toggle_flagged(cursor_x - 1, cursor_y - 1)
 
         if ch == curses.KEY_LEFT and cursor_x > 1:
             cursor_x -= 1 % WIDTH
@@ -83,5 +128,36 @@ def main(scr):
         render(scr, gb, cursor_x, cursor_y)
 
 
+def main() -> None:
+    """
+    Handles the main menu.
+    """
+    scoreboard = Scoreboard()
+
+    # Affichage du menu
+    print("Bienvenue sur le Démineur 3000")
+    print("Réalisé par Patrick CONTI et Florian CUNY")
+    print("")
+    print("Que souhaitez-vous faire ?")
+    print("1: Nouvelle partie")
+    print("2: Afficher les scores")
+    print("3: Afficher les contrôles")
+    print("4: Quitter")
+
+    selection = 0
+
+    while selection != 4:
+        if selection == 1:
+            curses.wrapper(play)
+        elif selection == 2:
+            display_score(scoreboard)
+        elif selection == 3:
+            display_controls()
+
+        print("")
+        selection = int(input("Entrez un numéro : "))
+        print("")
+
+
 if __name__ == "__main__":
-    curses.wrapper(main)
+    main()

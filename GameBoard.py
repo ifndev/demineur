@@ -25,7 +25,7 @@ class GameBoard:
             for x in self.__grid:
                 for y in x:
                     y.set_hidden(False)
-            return True # Game over
+            return True  # Game over
         else:
             self.propagate_from(x, y)
 
