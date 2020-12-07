@@ -1,6 +1,11 @@
 import curses
 from GameBoard import GameBoard
 from Scoreboard import Scoreboard, stringify_winner
+import time
+
+
+def calculate_score(start_time, end_time):
+    return (1 / (end_time - start_time)) * 10000
 
 
 def render(scr, gb: GameBoard, cursor_y, cursor_x):
@@ -50,11 +55,21 @@ def game_over() -> None:
     print("Vous aurez probablement plus de chances la prochaine fois...")
 
 
-def game_won() -> None:
+def game_won(score) -> None:
     """
     Affiche le menu de victoire de partie
     :return:
     """
+
+    scoreboard = Scoreboard()
+
+    print("Vous avez gagné!")
+    print("Voici votre score : ")
+    print("")
+    name = input("Entrez votre nom : ")
+
+    scoreboard.add_to_scoreboard(name, score)
+    scoreboard.save_scoreboard()
 
 
 def display_score(scoreboard) -> None:
@@ -103,6 +118,9 @@ def play(scr) -> None:
 
     render(scr, gb, cursor_y, cursor_x)
 
+    # start time
+    start_time = time.time()
+
     while True:  # Main Loop
         ch = scr.getch()
 
@@ -119,7 +137,9 @@ def play(scr) -> None:
 
             # Check if we found all the bombs
             if gb.get_remaining_bombs() == 0:
-                game_won()
+                curses.endwin()  # Close the game window
+                game_won(calculate_score(start_time=start_time, end_time=time.time()))
+                break
 
         if ch == ord('f'):
             gb.toggle_flagged(cursor_x - 1, cursor_y - 1)
@@ -144,6 +164,7 @@ def main() -> None:
     Handles the main menu.
     """
     scoreboard = Scoreboard()
+    scoreboard.save_scoreboard()  # Créer le fichier scoreboard s'il n'existe pas
 
     # Affichage du menu
     print("Bienvenue sur le Démineur 3000")
