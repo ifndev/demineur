@@ -9,6 +9,9 @@ class GameBoard:
         self.__size_y = size_y
 
         self.__grid = []
+
+        self.__bombs = self.__size_x  # This should be an option
+        self.__remaining_bombs = self.__bombs
         
         for x in range(size_x):
             self.__grid.append([])
@@ -19,9 +22,16 @@ class GameBoard:
         return self.__grid
 
     def reveal(self, x: int, y: int) -> bool:
+        """
+        Reveals a cell.
+        :param x:
+        :param y:
+        :return: True if the uncovered cell is a bomb.
+        """
         self.__grid[x][y].set_hidden(False)
 
         if self.__grid[x][y].is_bomb():
+            # Uncover the whole game board
             for x in self.__grid:
                 for y in x:
                     y.set_hidden(False)
@@ -31,15 +41,21 @@ class GameBoard:
 
     def toggle_flagged(self, x: int, y: int) -> None:
         self.__grid[x][y].set_flagged(not self.__grid[x][y].is_flagged())
+        # Update the bomb counter
+        if self.__grid[x][y].is_bomb():
+            if self.__grid[x][y].is_flagged():
+                self.__remaining_bombs += 1
+            else:
+                self.__remaining_bombs -= 1
 
     def is_flagged(self, x: int, y: int) -> bool:
         return self.__grid[x][y].is_flagged()
 
     def populate(self) -> None:
         seed()
-        nb_bombs = self.__size_x # This should be an option
+        nb_bombs = self.__bombs
         for i in range(nb_bombs):
-            x = randint(0, self.__size_x - 1) # Bad idea, we can end up with too less bombs
+            x = randint(0, self.__size_x - 1)  # Bad idea, we can end up with too less bombs
             y = randint(0, self.__size_y - 1)
             
             if not self.__grid[x][y].is_bomb():
@@ -68,3 +84,10 @@ class GameBoard:
                             self.propagate_from(x + x_adjacent, y + y_adjacent, r + 1)
         elif not self.__grid[x][y].is_bomb():
             self.__grid[x][y].set_hidden(False)
+
+    def get_remaining_bombs(self) -> int:
+        """
+        Returns the amount of bombs still to be found
+        :return: the amount of bombs to be found
+        """
+        return self.__remaining_bombs

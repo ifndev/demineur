@@ -50,6 +50,13 @@ def game_over() -> None:
     print("Vous aurez probablement plus de chances la prochaine fois...")
 
 
+def game_won() -> None:
+    """
+    Affiche le menu de victoire de partie
+    :return:
+    """
+
+
 def display_score(scoreboard) -> None:
     """
     Display the scoreboard
@@ -109,6 +116,10 @@ def play(scr) -> None:
                 curses.endwin()  # Close the game window
                 game_over()
                 break
+
+            # Check if we found all the bombs
+            if gb.get_remaining_bombs() == 0:
+                game_won()
 
         if ch == ord('f'):
             gb.toggle_flagged(cursor_x - 1, cursor_y - 1)
