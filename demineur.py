@@ -74,7 +74,7 @@ def game_won(score) -> None:
 
 def display_score(scoreboard) -> None:
     """
-    Display the scoreboard
+    Affiche le tableau des scores
     :param scoreboard: Instance de Scoreboard
     """
     print("Nos gagnants sont...")
@@ -86,7 +86,7 @@ def display_score(scoreboard) -> None:
 
 def display_controls() -> None:
     """
-    Display the controls
+    Affiche les contrôles
     """
     print("[ARROWS] pour déplacer le curseur")
     print("[SPACE] pour révéler une case")
@@ -95,8 +95,8 @@ def display_controls() -> None:
 
 def play(scr) -> None:
     """
-    Handles the controls and the game logic.
-    :param scr: the instance of the window created by Curses
+    Gestion de l'entrée et du déroulement du jeu
+    :param scr: L'instance de la fenêtre de curses
     """
     HEIGHT, WIDTH = scr.getmaxyx()  # Returns a tuple
     WIDTH -= 2
@@ -161,7 +161,7 @@ def play(scr) -> None:
 
 def main() -> None:
     """
-    Handles the main menu.
+    Procédure pour le menu
     """
     scoreboard = Scoreboard()
     scoreboard.save_scoreboard()  # Créer le fichier scoreboard s'il n'existe pas

@@ -10,7 +10,7 @@ class GameBoard:
 
         self.__grid = []
 
-        self.__bombs = self.__size_x  # This should be an option
+        self.__bombs = self.__size_x  # Serait mieux si c'était une option, ça permetterai de moduler la difficulté
         self.__remaining_bombs = self.__bombs
         
         for x in range(size_x):
@@ -23,7 +23,7 @@ class GameBoard:
 
     def reveal(self, x: int, y: int) -> bool:
         """
-        Reveals a cell.
+        Révèle une cellule
         :param x:
         :param y:
         :return: True if the uncovered cell is a bomb.
@@ -31,7 +31,7 @@ class GameBoard:
         self.__grid[x][y].set_hidden(False)
 
         if self.__grid[x][y].is_bomb():
-            # Uncover the whole game board
+            # Révèle le plateau dans son intégralité
             for x in self.__grid:
                 for y in x:
                     y.set_hidden(False)
@@ -41,7 +41,7 @@ class GameBoard:
 
     def toggle_flagged(self, x: int, y: int) -> None:
         self.__grid[x][y].set_flagged(not self.__grid[x][y].is_flagged())
-        # Update the bomb counter
+        # MAJ Du compteur de mines
         if self.__grid[x][y].is_bomb():
             if self.__grid[x][y].is_flagged():
                 self.__remaining_bombs += 1
@@ -55,7 +55,7 @@ class GameBoard:
         seed()
         nb_bombs = self.__bombs
         for i in range(nb_bombs):
-            x = randint(0, self.__size_x - 1)  # Bad idea, we can end up with too less bombs
+            x = randint(0, self.__size_x - 1)  # Hideuse idée, c'est un coup a finir avec trop peu de mines
             y = randint(0, self.__size_y - 1)
             
             if not self.__grid[x][y].is_bomb():
@@ -66,13 +66,11 @@ class GameBoard:
                             self.__grid[x+x_adjacent][y+y_adjacent].set_nearby_bombs( self.__grid[x+x_adjacent][y+y_adjacent].get_nearby_bombs() + 1)
 
     def propagate_from(self, x: int, y: int, r: int = 0) -> None:
-        # About the "r" optional argument
+        # Au sujet de l'argument r
         # 
-        # In order to prevent a stack overflow, python limits recursion depth to 990
-        # Circumventing would not be smart and could lead to the game hanging on propagate
-        # on really large boards.
-        #
-        # ==> We manually clamp the depth to a fixed limit, revealing only part of the board
+        # Python impose une limite au nombre de récusions possibles (990) pour éviter les récursions infinies
+        # Cela permet d'afficher une erreur claire au lieu d'attendre que la pile soit pleine et que le programme crash sans explications (comme en C)
+        # ==> On limite manuellement le nombre de récursions possibles afin d'éviter de créer des opportunités de crash en augmentant la limite
 
         if self.__grid[x][y].get_nearby_bombs() == 0 and r < 200:
                                                          # Here
@@ -87,7 +85,7 @@ class GameBoard:
 
     def get_remaining_bombs(self) -> int:
         """
-        Returns the amount of bombs still to be found
-        :return: the amount of bombs to be found
+        Renvoie le nombre de mines qu'il reste a trouver
+        :return: le nombre de mines restantes
         """
         return self.__remaining_bombs
